@@ -6,5 +6,4 @@ package com.esports.vishal.esportsscoreapplication.NetworkUtility;
 
 public class EsportsItem {
 
-
 }
