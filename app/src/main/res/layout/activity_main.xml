@@ -134,9 +134,20 @@
 
                 </LinearLayout>
 
-
             </LinearLayout>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:onClick="onTwitterButtonClick"
+                android:padding="50dp"
+                android:text="Twitter Login" />
+
         </android.support.v7.widget.CardView>
+
     </LinearLayout>
 
 </LinearLayout>

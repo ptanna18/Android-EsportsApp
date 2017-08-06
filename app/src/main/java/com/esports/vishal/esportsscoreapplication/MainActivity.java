@@ -15,11 +15,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.Calendar;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -171,6 +173,56 @@ public class MainActivity extends AppCompatActivity {
         Picasso.with(imageView.getContext()).load(R.drawable.csgo).resize(dp2px(220),0).into(imageView);
         Picasso.with(imageViewlol.getContext()).load(R.drawable.lol).resize(dp2px(220),0).into(imageViewlol);
     }
+
+    public void onTwitterButtonClick(View view) {
+        handleTwitterLoginAndShare();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mTwitterShareHelper != null && mTwitterShareHelper.getmTwitterAuthClient() != null)
+            mTwitterShareHelper.getmTwitterAuthClient().onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * This method is used to handle the sharing of image on Twitter application
+     *
+     * @param uri
+     */
+    TwitterHelper mTwitterShareHelper;
+
+    private void handleTwitterLoginAndShare() {
+        if (mTwitterShareHelper == null)
+            mTwitterShareHelper = new TwitterHelper(this);
+        mTwitterShareHelper.doAuth(new TwitterHelper.TwitterListerner() {
+
+            @Override
+            public void onLoginSuccess(TwitterSession session) {
+                // Login success
+                Toast.makeText(getApplicationContext(), "Twitter login success", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), TweetsActivity.class);
+                startActivity(intent);
+        }
+
+            @Override
+            public void onLoginFailed(TwitterException e) {
+                // Login fail
+                Toast.makeText(getApplicationContext(), "Twitter login failed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onShareSuccess() {
+                // on twitter share success
+            }
+
+            @Override
+            public void onShareFailed() {
+                // on twitter share fail
+            }
+        });
+    }
+
 
     public int dp2px(int dp) {
         WindowManager wm = (WindowManager) this.getBaseContext()
